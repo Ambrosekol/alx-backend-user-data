@@ -62,8 +62,9 @@ class DB:
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """Updates a user"""
-        user = self.find_user_by(id=user_id)
-        if user is None:
+        try:
+            user = self.find_user_by(id=user_id)
+        except NoResultFound:
             return
         prams = {}
         for key, val in kwargs.items():

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Flask App"""
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort, redirect, url_for
 from auth import Auth
+
 
 
 app = Flask(__name__)
@@ -24,14 +25,27 @@ def users() -> str:
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/sessions', methods=['POST', 'DELETE'])
 def login() -> str:
+    """
+    Create a session for a user
+    """
     email, passwrd = request.form.get('email'), request.form.get('password')
     if AUTH.valid_login(email, passwrd) is True:
-        return jsonify({"message": "your login is Valid"})
+        if request.method == 'DELETE':
+            user = AUTH.get_user_from_session_id(request.cookies['session_id'])
+            if user is not None:
+                AUTH.destroy_session(user.id)
+                return redirect(url_for("/"))
+            else:
+                return abort(403)
+        else:
+            session_id = AUTH.create_session(email)
+            resp = jsonify({"email": email, "message": "logged in"})
+            resp.set_cookie("session_id", session_id)
+            return resp
     else:
-        return jsonify({"message": "your login is invalid"}), 400
-
+        return abort(401)
 
 
 
