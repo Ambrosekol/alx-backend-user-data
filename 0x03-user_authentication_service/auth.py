@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 """
-Hash A Paassword
+This Module handles the authentication of
+a user and abstracts the SQL database
 """
 import bcrypt
 from db import DB
@@ -25,13 +26,18 @@ def _generate_uuid() -> str:
 
 
 class Auth:
-    """Auth class to interact with the authentication database.
+    """
+    Auth class to interact with the authentication database.
     """
 
     def __init__(self):
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
+        """
+        Register a new user if not in db
+        else returns a Value err
+        """
         try:
             registeredUser = self._db.find_user_by(email=email)
         except NoResultFound:
@@ -42,7 +48,7 @@ class Auth:
                              .format(email))
 
     def valid_login(self, email: str, password: str) -> bool:
-        """ Validate Login"""
+        """ Validate the user Login and returns a bool"""
         try:
             registeredUser = self._db.find_user_by(email=email)
             if bcrypt.checkpw(password.encode("utf-8"),
@@ -97,6 +103,9 @@ class Auth:
             raise ValueError()
 
     def update_password(self, reset_token: str, password: str) -> None:
+        """
+        method to update a users password
+        """
         try:
             user = self._db.find_user_by(reset_token=reset_token)
             user.hashed_password = _hash_password(password)
