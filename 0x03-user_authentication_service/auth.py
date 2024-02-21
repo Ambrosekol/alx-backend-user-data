@@ -33,11 +33,12 @@ class Auth:
     def register_user(self, email: str, password: str) -> User:
         try:
             registeredUser = self._db.find_user_by(email=email)
-            raise ValueError("User {} already exists"
-                             .format(registeredUser.email))
         except NoResultFound:
             new_user = self._db.add_user(email, _hash_password(password))
             return new_user
+        else:
+            raise ValueError("User {} already exists"
+                             .format(email))
 
     def valid_login(self, email: str, password: str) -> bool:
         """ Validate Login"""

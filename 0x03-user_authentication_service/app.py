@@ -20,7 +20,7 @@ def index() -> str:
 
 @app.route("/users", methods=["POST"], strict_slashes=False)
 def users() -> str:
-    """ Create a new user"""
+    """ Create a new user in the db"""
     email, password = request.form.get("email"), request.form.get("password")
     try:
         user = AUTH.register_user(email, password)
