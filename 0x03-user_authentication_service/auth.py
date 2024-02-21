@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """
 This Module handles the authentication of
 a user and abstracts the SQL database
@@ -108,8 +107,7 @@ class Auth:
         try:
             user = self._db.find_user_by(reset_token=reset_token)
             hash = _hash_password(password)
-            self._db.update_user(user.id, hashed_password=hash,
-                                 reset_token=None)
+            self._db.update_user(user.id, hashed_password=hash, reset_token=None)
         except NoResultFound:
             raise ValueError()
         return None
