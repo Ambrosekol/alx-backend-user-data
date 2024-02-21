@@ -11,7 +11,10 @@ AUTH = Auth()
 
 @app.route("/", methods=["GET"], strict_slashes=False)
 def index() -> str:
-    """Json payload delivery for home page."""
+    """GET /
+     Return:
+    - The home page's payload.
+    """
     return jsonify({"message": "Bienvenue"})
 
 
