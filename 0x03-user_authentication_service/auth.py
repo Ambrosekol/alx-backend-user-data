@@ -5,8 +5,7 @@ This Module handles the authentication of
 a user and abstracts the SQL database
 """
 import bcrypt
-from db import DB
-from user import User
+from db import DB, User
 from sqlalchemy.orm.exc import NoResultFound
 from uuid import uuid4
 from typing import Optional, Union
