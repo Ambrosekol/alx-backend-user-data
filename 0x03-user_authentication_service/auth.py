@@ -6,7 +6,6 @@ a user and abstracts the SQL database
 import bcrypt
 from db import DB, User
 from sqlalchemy.orm.exc import NoResultFound
-from uuid import uuid4
 from typing import Union
 
 
@@ -19,8 +18,8 @@ def _hash_password(password: str) -> bytes:
 
 def _generate_uuid() -> str:
     """generate unique UUID string"""
-    uuid = uuid4()
-    return str(uuid)
+    from uuid import uuid4
+    return str(uuid4())
 
 
 class Auth:
