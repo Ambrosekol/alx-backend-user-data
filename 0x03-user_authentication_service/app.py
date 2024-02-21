@@ -9,7 +9,7 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
-@app.route("/", methods=["GET"], strict_slashes=False)
+@app.route("/", strict_slashes=False)
 def index() -> str:
     """GET /
      Return:
@@ -28,7 +28,7 @@ def users() -> str:
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route('/sessions', methods=['POST'])
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
     """
     Create a session for a user
@@ -43,15 +43,14 @@ def login() -> str:
         return abort(401)
 
 
-@app.route("/sessions", methods=["DELETE"])
+@app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout() -> str:
     sessionId = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(sessionId)
-    if user is not None:
-        AUTH.destroy_session(user.id)
-        return redirect("/")
-    else:
+    if user is None:
         return abort(403)
+    AUTH.destroy_session(user.id)
+    return redirect("/")
 
 
 if __name__ == "__main__":
