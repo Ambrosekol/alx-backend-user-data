@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flask App"""
+"""This Module Contains code for the actual endpoints callable"""
 
 from flask import Flask, jsonify, request, abort, redirect, url_for
 from auth import Auth
