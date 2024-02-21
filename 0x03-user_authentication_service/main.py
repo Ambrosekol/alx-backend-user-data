@@ -8,6 +8,8 @@ import requests
 
 
 domain = "http://127.0.0.1:5000/%s"
+
+
 def register_user(email: str, password: str) -> None:
     """Test registeration endpoint
     """
