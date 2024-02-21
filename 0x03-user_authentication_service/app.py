@@ -84,7 +84,7 @@ def reset_password() -> str:
         abort(403)
 
 
-@app.route("/reset_password", methods=["PUT"], strict_slases=False)
+@app.route("/reset_password", methods=["PUT"], strict_slashes=False)
 def resetPassword() -> str:
     """
     Reset password to a new password
