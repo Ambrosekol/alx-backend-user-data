@@ -5,9 +5,9 @@ from flask import Flask, jsonify, request, abort, redirect, url_for
 from auth import Auth
 
 
-
 app = Flask(__name__)
 AUTH = Auth()
+
 
 @app.route('/', methods=['GET'])
 def jsonpayload() -> str:
@@ -46,7 +46,6 @@ def login() -> str:
             return resp
     else:
         return abort(401)
-
 
 
 if __name__ == "__main__":
