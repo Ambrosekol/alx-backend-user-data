@@ -20,7 +20,9 @@ def index() -> str:
 
 @app.route("/users", methods=["POST"], strict_slashes=False)
 def users() -> str:
-    """ Create a new user in the db"""
+    """
+    Create a new user in the db
+    """
     email, password = request.form.get("email"), request.form.get("password")
     try:
         user = AUTH.register_user(email, password)
@@ -41,17 +43,32 @@ def login() -> str:
         resp.set_cookie("session_id", session_id)
         return resp
     else:
-        return abort(401)
+        abort(401)
 
 
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout() -> str:
-    sessionId = request.cookies.get("session_id")
+    """
+    This logs the user out of the session
+    """
+    sessionId = request.cookies.get("session_id", None)
     user = AUTH.get_user_from_session_id(sessionId)
     if user is None:
-        return abort(403)
+        abort(403)
     AUTH.destroy_session(user.id)
     return redirect("/")
+
+
+@app.route("/profile", methods=["GET"], strict_slashes=False)
+def profile() -> str:
+    """
+    Returns the user profile (email)
+    """
+    sessionId = request.cookies.get("session_id", None)
+    user = AUTH.get_user_from_session_id(sessionId)
+    if user is None:
+        abort(403)
+    return jsonify({"email": user.email})
 
 
 if __name__ == "__main__":
