@@ -25,28 +25,30 @@ def users() -> str:
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route('/sessions', methods=['POST', 'DELETE'])
+@app.route('/sessions', methods=['POST'])
 def login() -> str:
     """
     Create a session for a user
     """
     email, passwrd = request.form.get('email'), request.form.get('password')
     if AUTH.valid_login(email, passwrd) is True:
-        if request.method == 'DELETE':
-            user = AUTH.get_user_from_session_id(request.cookies['session_id'])
-            if user is not None:
-                AUTH.destroy_session(user.id)
-                return redirect(url_for("/"))
-            else:
-                return abort(403)
-        else:
-            session_id = AUTH.create_session(email)
-            resp = jsonify({"email": email, "message": "logged in"})
-            resp.set_cookie("session_id", session_id)
-            return resp
+        session_id = AUTH.create_session(email)
+        resp = jsonify({"email": email, "message": "logged in"})
+        resp.set_cookie("session_id", session_id)
+        return resp
     else:
         return abort(401)
 
+
+@app.route("/sessions", methods=["DELETE"])
+def logout() -> str:
+        sessionId = request.cookies.get("session_id")
+        user = AUTH.get_user_from_session_id(sessionId)
+        if user is not None:
+            AUTH.destroy_session(user.id)
+            return redirect("/")
+        else:
+            return abort(403)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
