@@ -9,9 +9,9 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
-@app.route('/', methods=['GET'])
-def jsonpayload() -> str:
-    """Json payload delivery"""
+@app.route("/", methods=["GET"], strict_slashes=False)
+def index() -> str:
+    """Json payload delivery for home page."""
     return jsonify({"message": "Bienvenue"})
 
 
